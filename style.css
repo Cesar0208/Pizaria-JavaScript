@@ -1,0 +1,23 @@
+.container {
+    display: flex;
+    gap: 2%;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  .item:nth-child(1),
+  .item:nth-child(2),
+  .item:nth-child(3),
+  .item:nth-child(4),
+  .item:nth-child(5),
+  .item:nth-child(6),
+  .item:nth-child(7),
+  .item:nth-child(8) {
+    width: 300px;
+    height: 450px;
+}
+
+.img {
+    width: 100%;
+    border-radius: 10px;
+}
