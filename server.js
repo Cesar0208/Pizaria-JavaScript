@@ -68,7 +68,15 @@ let produtos = [
         estoque: "Em estoque"
     }
 ];
- 
+let pedidos = [
+    {
+        id:1,
+        itenspedidos:"pizza e coca",
+        metododepagamento:"piquis",
+        valortotal:69,
+        taxaDeEntrega:2
+    }
+];
 let nextId = 4; 
 
 // Área de usuários
@@ -281,6 +289,94 @@ app.delete("/produtos/:id", (req, res) => {
     res.json({
         mensagem: "Produto removido com sucesso",
         data: produtoRemovido
+    });
+});
+//Area Pedidos
+app.get("/pedidos",(req,res) => {
+    res.json({
+        mensagem:"Lista de Pedidos",
+        data:pedidos,
+        total:pedidos.length
+    })
+});
+app.get("/pedidos/:id",(req,res) => {
+     const id = parseInt(req.params.id);
+    const pedido = pedidos.find(p => p.id === id);
+
+    if(!pedido) {
+        return res.status(404).json({
+            mensagem: "Pedido não encontrado",
+            error: true
+        });
+    }
+
+    res.json({
+        mensagem: "Pedido encontrado",
+        data: pedido
+    });
+});
+
+app.post('/pedidos', (req, res) => {
+    const { itenspedidos, metododepagamento, valortotal, taxaDeEntrega } = req.body;
+
+    if (!itenspedidos || !metododepagamento || !valortotal || !taxaDeEntrega) {
+        return res.status(400).json({ mensagem: 'Itens Pedidos, Metodo de Pagamento, Valor Total, Taxa de Entrega são obrigatórios', 
+            error: true 
+        });
+    }
+
+    const novoId = pedidos.length ? Math.max(...pedidos.map(u => u.id)) + 1 : 1;
+    const novoPedido = { id: novoId, itenspedidos, metododepagamento, valortotal, taxaDeEntrega };
+    pedidos.push(novoPedidos);
+
+    res.status(201).json({ mensagem: 'Pedido criado com sucesso', data: novoPedido});
+});
+
+app.put('/pedidos/:id', (req, res) => {
+  const id = parseInt(req.params.id);
+  
+  const pedidosIndex = pedidos.findIndex(u => u.id === id);
+  
+  if (pedidosIndex === -1) {
+    return res.status(404).json({
+      mensagem: "pedido não encontrado",
+      error: true
+    });
+  }
+  
+  const { itenspedidos, metododepagamento, valortotal, taxaDeEntrega } = req.body;
+  
+    if (!itenspedidos || !metododepagamento || !valortotal || !taxaDeEntrega) {
+        return res.status(400).json({ mensagem: 'Itens Pedidos, Metodo de Pagamento, Valor Total, Taxa de Entrega são obrigatórios', 
+            error: true 
+        });
+    }
+  // Atualizar pedidos
+  pedidos[pedidosIndex] = { id, itenspedidos, metododepagamento, valortotal, taxaDeEntrega };
+  
+  res.json({
+    mensagem: "pedido atualizado com sucesso",
+    data: pedidos[pedidosIndex]
+  });
+});
+
+app.delete("/pedidos/:id", (req, res) => {
+    const id = parseInt(req.params.id);
+    
+    const pedidoIndex = pedidos.findIndex(p => p.id === id);
+    
+    if (pedidoIndex === -1) {
+        return res.status(404).json({
+            mensagem: "Pedido não encontrado",
+            error: true
+        });
+    }
+    
+    const pedidoRemovido = pedidos.splice(pedidoIndex, 1)[0];
+    
+    res.json({
+        mensagem: "Pedido removido com sucesso",
+        data: pedidoRemovido
     });
 });
 
