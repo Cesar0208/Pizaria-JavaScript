@@ -10,7 +10,65 @@ let usuarios = [
     {id:3, nome: 'João', email:'joao@gmail.com'}
 ];
 
-let produtos = []; 
+let produtos = [
+    {
+        id: 1,
+        nome: "Margherita",
+        preco: 42.90,
+        descricao: "A clássica pizza italiana com molho de tomate, muçarela fresca, manjericão e azeite. Simples e deliciosa.",
+        estoque: "Em estoque"
+    },
+    {
+        id: 2,
+        nome: "Marinara",
+        preco: 38.90,
+        descricao: "Molho de tomate, alho, orégano e azeite. A pizza dos pescadores, sem queijo mas cheia de sabor.",
+        estoque: "Em estoque"
+    },
+    {
+        id: 3,
+        nome: "Diavola",
+        preco: 46.90,
+        descricao: "Molho de tomate, muçarela, salame picante e pimenta. Para quem gosta de um toque ardido.",
+        estoque: "Fora de estoque"
+    },
+    {
+        id: 4,
+        nome: "Quattro Stagioni",
+        preco: 52.90,
+        descricao: "Dividida em quatro partes: alcachofras, azeitonas, cogumelos e presunto. As quatro estações em uma pizza.",
+        estoque: "Em estoque"
+    },
+    {
+        id: 5,
+        nome: "Quattro Formaggi",
+        preco: 49.90,
+        descricao: "Uma conbinação celestial de quatro queijos: muçarela, gorgonzola, parmesão e fontina.",
+        estoque: "Em estoque"
+    },
+    {
+        id: 6,
+        nome: "Prosciutto e Funghi",
+        preco: 47.90,
+        descricao: "Presunto cru italiano e cogumelos frescos sobre uma base de muçarela derretida.",
+        estoque: "Fora de estoque"
+    },
+    {
+        id: 7,
+        nome: "Capricciosa",
+        preco: 51.90,
+        descricao: "Presunto, cogumelos, alcachofras, azeitonas e ovos. Uma pizza cheia de personalidade.",
+        estoque: "Em estoque"
+    },
+    {
+        id: 8,
+        nome: "Ortolana",
+        preco: 44.90,
+        descricao: "Berinjela, abobrinha, pimentões grelhados e muçarela. A opção vegetariana perfeita.",
+        estoque: "Em estoque"
+    }
+];
+ 
 let nextId = 4; 
 
 // Área de usuários
