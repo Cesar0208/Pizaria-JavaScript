@@ -10,66 +10,73 @@ let usuarios = [
     {id:3, nome: 'João', email:'joao@gmail.com'}
 ];
 
-let produtos = [
-    {
-        id: 1,
-        nome: "Margherita",
-        preco: 42.90,
-        descricao: "A clássica pizza italiana com molho de tomate, muçarela fresca, manjericão e azeite. Simples e deliciosa.",
-        estoque: "Em estoque"
-    },
-    {
-        id: 2,
-        nome: "Marinara",
-        preco: 38.90,
-        descricao: "Molho de tomate, alho, orégano e azeite. A pizza dos pescadores, sem queijo mas cheia de sabor.",
-        estoque: "Em estoque"
-    },
-    {
-        id: 3,
-        nome: "Diavola",
-        preco: 46.90,
-        descricao: "Molho de tomate, muçarela, salame picante e pimenta. Para quem gosta de um toque ardido.",
-        estoque: "Fora de estoque"
-    },
-    {
-        id: 4,
-        nome: "Quattro Stagioni",
-        preco: 52.90,
-        descricao: "Dividida em quatro partes: alcachofras, azeitonas, cogumelos e presunto. As quatro estações em uma pizza.",
-        estoque: "Em estoque"
-    },
-    {
-        id: 5,
-        nome: "Quattro Formaggi",
-        preco: 49.90,
-        descricao: "Uma conbinação celestial de quatro queijos: muçarela, gorgonzola, parmesão e fontina.",
-        estoque: "Em estoque"
-    },
-    {
-        id: 6,
-        nome: "Prosciutto e Funghi",
-        preco: 47.90,
-        descricao: "Presunto cru italiano e cogumelos frescos sobre uma base de muçarela derretida.",
-        estoque: "Fora de estoque"
-    },
-    {
-        id: 7,
-        nome: "Capricciosa",
-        preco: 51.90,
-        descricao: "Presunto, cogumelos, alcachofras, azeitonas e ovos. Uma pizza cheia de personalidade.",
-        estoque: "Em estoque"
-    },
-    {
-        id: 8,
-        nome: "Ortolana",
-        preco: 44.90,
-        descricao: "Berinjela, abobrinha, pimentões grelhados e muçarela. A opção vegetariana perfeita.",
-        estoque: "Em estoque"
-    }
-];
-
 // Área de usuários
+
+// POST um novo usuário
+app.post('/usuarios', (req, res) => {
+    const { nome, email } = req.body;
+
+    // Validação de campos obrigatórios
+    if (!nome || !email) {
+        return res.status(400).json({
+            mensagem: "Erro: Nome e Email são obrigatórios para criar um usuário.",
+            data: null
+        });
+    }
+
+    // Cria o novo suário com um ID único
+    const novoUsuario = {
+        id: nextId++,
+        nome: nome,
+        email: email
+    };
+
+    // Adiciona ao banco de dados em memória
+    usuarios.push(novoUsuario);
+
+    // mensagem de sucesso
+    res.status(201).json({
+        mensagem: "Usuário criado com sucesso.",
+        data: novoUsuario
+    });
+});
+
+
+// (PATCH) Atualizar um usuário por id
+// URL: /usuarios/:id
+app.patch('/usuarios/:id', (req, res) => {
+    // Pega o ID da URL e converte para número
+    const id = parseInt(req.params.id);
+    // Pega os campos a serem atualizados do corpo
+    const updates = req.body;
+
+    // 1. Encontra o índice do usuário no array
+    const index = usuarios.findIndex(u => u.id === id);
+
+    // 2. Verifica se o usuário existe
+    if (index === -1) {
+        return res.status(404).json({
+            mensagem: `Erro: Usuário com ID ${id} não encontrado.`,
+            data: null
+        });
+    }
+
+    // Pega o usuário existente
+    let usuarioAtual = usuarios[index];
+
+    // Aplica as atualizações de forma parcial
+    const usuarioAtualizado = Object.assign(usuarioAtual, updates);
+    
+    // Atualiza o array
+    usuarios[index] = usuarioAtualizado;
+
+    // Retorna a resposta de sucesso
+    res.json({
+        mensagem: "Usuário atualizado com sucesso.",
+        data: usuarioAtualizado
+    });
+});
+
 // GET usuários
 app.get("/usuarios", (req, res) => {
     res.json({
