@@ -10,6 +10,9 @@ let usuarios = [
     {id:3, nome: 'João', email:'joao@gmail.com'}
 ];
 
+let produtos = []; 
+let nextId = 4; 
+
 // Área de usuários
 
 // POST um novo usuário
@@ -42,8 +45,7 @@ app.post('/usuarios', (req, res) => {
 });
 
 
-// (PATCH) Atualizar um usuário por id
-// URL: /usuarios/:id
+//  Atualizar um usuário por id
 app.patch('/usuarios/:id', (req, res) => {
     // Pega o ID da URL e converte para número
     const id = parseInt(req.params.id);
@@ -126,7 +128,9 @@ app.delete("/usuarios/:id", (req, res) => {
     });
 });
 
-//
+// Área de produtos
+
+// POST um novo produto
 app.post('/produtos', (req, res) => {
     console.log('POST /produtos - Criando novo produto');
     const { nome, preco, descricao, estoque } = req.body;
@@ -142,6 +146,7 @@ app.post('/produtos', (req, res) => {
     res.status(201).json({ mensagem: 'Produto criado com sucesso', data: novoProduto});
 });
 
+// PUT (atualizar) produto por ID
 app.put('/produtos/:id', (req, res) => {
   const id = parseInt(req.params.id);
   console.log(`PUT /produtos - Atualizando produtos`);
@@ -164,7 +169,7 @@ app.put('/produtos/:id', (req, res) => {
     });
   }
   
-  // Atualizar usuário
+  // Atualizar produto
   produtos[produtosIndex] = { id, nome, preco, descricao, estoque };
   
   res.json({
@@ -172,7 +177,57 @@ app.put('/produtos/:id', (req, res) => {
     data: produtos[produtosIndex]
   });
 });
+
+// GET produtos (listar todos)
+app.get("/produtos", (req, res) => {
+    res.json({
+        mensagem: "Lista de produtos",
+        data: produtos,
+        total: produtos.length
+    });
+});
+
+// GET produto por ID
+app.get("/produtos/:id", (req, res) => {
+    const id = parseInt(req.params.id);
+    const produto = produtos.find(p => p.id === id);
+
+    if(!produto) {
+        return res.status(404).json({
+            mensagem: "Produto não encontrado",
+            error: true
+        });
+    }
+
+    res.json({
+        mensagem: "Produto encontrado",
+        data: produto
+    });
+});
+
+// DELETE produto por ID
+app.delete("/produtos/:id", (req, res) => {
+    const id = parseInt(req.params.id);
+    
+    const produtoIndex = produtos.findIndex(p => p.id === id);
+    
+    if (produtoIndex === -1) {
+        return res.status(404).json({
+            mensagem: "Produto não encontrado",
+            error: true
+        });
+    }
+    
+    const produtoRemovido = produtos.splice(produtoIndex, 1)[0];
+    
+    res.json({
+        mensagem: "Produto removido com sucesso",
+        data: produtoRemovido
+    });
+});
+
 // Abrindo o servidor
 app.listen(PORT, () => {
     console.log(`Servidor rodando em http://localhost:${PORT}`);
-})
+});
+
